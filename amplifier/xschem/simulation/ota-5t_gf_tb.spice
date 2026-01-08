@@ -1,0 +1,70 @@
+** sch_path: /foss/designs/Chipathon2025/ota-5t/xschem/ota-5t_gf_tb.sch
+**.subckt ota-5t_gf_tb
+x1 vip vim vo VDD VSS net3 ota-5t_gf
+E1 vip net2 net1 GND 0.5
+E2 vim net2 net1 GND -0.5
+Vdm net1 GND dc 0 ac 1
+Vcm net2 GND {vcm}
+V0 VSS GND 0
+V1 VDD GND {vdd}
+C1 vo GND {cl} m=1
+IB VDD net3 {ibn}
+**** begin user architecture code
+
+
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
+.inc ../sizing_ota-5t_gf.spice
+.param vdd=3 vcm=1.5 cl=1p
+.option savecurrents
+
+.control
+    save all
+    save @m.x1.xM0a.m0[gm]
+    op
+    show
+    write ota-5t_gf_tb.raw
+    set appendwrite
+
+    ac dec 20 1 10e9
+    let vo_mag = abs(v(vo))
+    let vo_phase_margin = phase(v(vo)) * 180/pi + 180
+    meas ac A0 find vo_mag at=1k
+    meas ac UGF when vo_mag=1 fall=1
+    meas ac PM find vo_phase_margin when vo_mag=1
+    echo $&A0 $&UGF $&PM
+    echo $plots
+    remzerovec
+    write ota-5t_gf_tb.raw
+.endc
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  ota-5t_gf.sym # of pins=6
+** sym_path: /foss/designs/Chipathon2025/ota-5t/xschem/ota-5t_gf.sym
+** sch_path: /foss/designs/Chipathon2025/ota-5t/xschem/ota-5t_gf.sch
+.subckt ota-5t_gf vip vim vo VDD VSS ibn
+*.ipin vip
+*.ipin vim
+*.opin vo
+*.iopin VDD
+*.iopin VSS
+*.iopin ibn
+XM2b vo vmirr VDD VDD pfet_03v3 L={L2} W={W2} nf=14 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM2a vmirr vmirr VDD VDD pfet_03v3 L={L2} W={W2} nf=14 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM1a vmirr vip vtail VSS nfet_03v3 L={L1} W={W1} nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM0b vtail ibn VSS VSS nfet_03v3 L={L0} W={W0} nf=8 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM1b vo vim vtail VSS nfet_03v3 L={L1} W={W1} nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM0a ibn ibn VSS VSS nfet_03v3 L={L0} W={W0} nf=8 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+.ends
+
+.GLOBAL GND
+.end

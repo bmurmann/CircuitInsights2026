@@ -1,0 +1,29 @@
+** differential pair sizing example
+
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
+.param lx=0.28e-6 wx=10*146e-6 nfx=30, idx=1e-3
+
+XM1a d g s 0 nfet_03v3 L={lx} W={wx} nf=30 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XM1b d g s 0 nfet_03v3 L={lx} W={wx} nf=30 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+vg  g  0  1
+vd  d  0  2
+is  s  0  {2*idx}
+
+.control
+  op
+  show
+  save @m.xM1a.m0[gm]
+  save @m.xM1a.m0[cgg]
+  save @m.xM1a.m0[cgso]
+  save @m.xM1a.m0[cgdo]
+
+  print @m.xM1a.m0[gm]
+  print @m.xM1a.m0[cgg]
+  print @m.xM1a.m0[cgso]
+  print @m.xM1a.m0[cgdo]
+
+.endc
+.end
