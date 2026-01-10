@@ -1,0 +1,43 @@
+** sch_path: /foss/designs/CircuitInsights2026/example2/xschem/example2.sch
+**.subckt example2
+E1 vsp vsc vsd GND 0.5
+E2 vsm vsc vsd GND -0.5
+Vdm vsd GND dc 0 ac 1
+Vcm vsc GND {vcm}
+V1 VDD GND {vdd}
+IB tail GND {2*id}
+XM1 vom vip tail tail sg13_lv_nmos w={w} l={l} ng={nf} m=1
+XM2 vop vim tail tail sg13_lv_nmos w={w} l={l} ng={nf} m=1
+R1 VDD vom {rd} m=1
+R2 VDD vop {rd} m=1
+R4 vip vsp {rs} m=1
+R5 vim vsm {rs} m=1
+C2 vop GND {cl} m=1
+C1 GND vom {cl} m=1
+**** begin user architecture code
+
+
+.lib cornerMOSlv.lib mos_tt
+.inc ../../example2_params.spice
+.param vdd=1.2 vcm=0.9
+
+.control
+    save all
+    op
+    show
+    write example2.raw
+    ac dec 20 1 10e9
+    let vod_mag = abs(v(vop, vom))
+    meas ac AV0 find vod_mag at=1k
+    meas ac BW when vod_mag=0.707 fall=1
+    set wr_singlescale
+    set wr_vecnames
+    option numdgt = 3
+    wrdata example2.txt vod_mag
+.endc
+
+
+**** end user architecture code
+**.ends
+.GLOBAL GND
+.end
