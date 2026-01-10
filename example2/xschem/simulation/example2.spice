@@ -6,18 +6,14 @@ Vdm vsd GND dc 0 ac 1
 Vcm vsc GND {vcm}
 V1 VDD GND {vdd}
 IB tail GND {2*id}
-XM1 vom vip tail tail sg13_lv_nmos w={w} l={l} ng={nf} m=1
-XM2 vop vim tail tail sg13_lv_nmos w={w} l={l} ng={nf} m=1
+XM1 vom vip tail tail sg13_lv_nmos w={w/nf} l={l} ng=1 m=nf
+XM2 vop vim tail tail sg13_lv_nmos w={w/nf} l={l} ng=1 m=nf
 R1 VDD vom {rd} m=1
 R2 VDD vop {rd} m=1
 R4 vip vsp {rs} m=1
 R5 vim vsm {rs} m=1
 C2 vop GND {cl} m=1
 C1 GND vom {cl} m=1
-XM3 net3 net2 net1 net1 sg13_lv_nmos w=5u l=0.13u ng=13 m=1
-V2 net2 net1 0.48
-V3 net1 GND 0
-V4 net3 net1 0.6
 **** begin user architecture code
 
 

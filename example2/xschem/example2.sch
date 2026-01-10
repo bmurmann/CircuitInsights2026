@@ -64,7 +64,7 @@ only_toplevel=false
 value="
 .lib cornerMOSlv.lib mos_tt
 .inc ../../example2_params.spice
-.param vdd=1.2 vcm=0.9
+.param vdd=1.2 vcm=0.7
 
 .control
     save all
@@ -101,17 +101,17 @@ C {devices/lab_wire.sym} 230 -530 0 1 {name=p4 sig_type=std_logic lab=vip}
 C {devices/lab_wire.sym} 390 -530 0 1 {name=p6 sig_type=std_logic lab=vim}
 C {sg13g2_pr/sg13_lv_nmos.sym} 600 -310 0 0 {name=M1
 l=\{l\}
-w=\{w\}
-ng=\{nf\}
-m=1
+w=\{w/nf\}
+ng=1
+m=nf
 model=sg13_lv_nmos
 spiceprefix=X
 }
 C {sg13g2_pr/sg13_lv_nmos.sym} 820 -310 0 1 {name=M2
 l=\{l\}
-w=\{w\}
-ng=\{nf\}
-m=1
+w=\{w/nf\}
+ng=1
+m=nf
 model=sg13_lv_nmos
 spiceprefix=X
 }
