@@ -26,10 +26,11 @@ C1 GND vom {cl} m=1
     op
     show
     write example2.raw
-    ac dec 20 1 10e9
+    ac dec 100 1e3 10e9
     let vod_mag = abs(v(vop, vom))
     meas ac AV0 find vod_mag at=1k
-    meas ac BW when vod_mag=0.707 fall=1
+    let th = AV0/sqrt(2)
+    meas ac BW when vod_mag=th fall=1
     set wr_singlescale
     set wr_vecnames
     option numdgt = 3

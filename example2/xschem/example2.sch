@@ -4,6 +4,8 @@ K {}
 V {}
 S {}
 E {}
+T {Note: Dependence of device capacitances on ng seems unrealistically large with these models.
+I am therefore using m-factor scaling.} 40 50 0 0 0.4 0.4 {}
 N 310 -330 350 -330 {
 lab=vsd}
 N 130 -370 130 -220 {
@@ -71,17 +73,18 @@ value="
     op
     show
     write example2.raw
-    ac dec 20 1 10e9
+    ac dec 100 1e3 10e9
     let vod_mag = abs(v(vop, vom))
     meas ac AV0 find vod_mag at=1k
-    meas ac BW when vod_mag=0.707 fall=1
+    let th = AV0/sqrt(2) 
+    meas ac BW when vod_mag=th fall=1
     set wr_singlescale
     set wr_vecnames
     option numdgt = 3
     wrdata example2.txt vod_mag
 .endc
 "}
-C {devices/launcher.sym} 1030 -150 0 0 {name=h26
+C {devices/launcher.sym} 1030 -140 0 0 {name=h26
 descr="Annotate OP" 
 tclcommand="set show_hidden_texts 1; xschem annotate_op"
 }
